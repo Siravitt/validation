@@ -3,6 +3,7 @@ package validation
 import (
 	"regexp"
 
+	"github.com/forPelevin/gomoji"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -12,11 +13,14 @@ var (
 )
 
 func registerCustomValidations() {
-	validate.RegisterValidation("thai_mobile", validateThaiMobile)
-	RegisterTranslation("thai_mobile", "{0} เบอร์โทรไม่ถูกต้อง")
+	validate.RegisterValidation(TagThaiMobile, validateThaiMobile)
+	RegisterTranslation(TagThaiMobile, "{0} เบอร์โทรไม่ถูกต้อง")
 
-	validate.RegisterValidation("no_script", validateNoScript)
-	RegisterTranslation("no_script", "{0} ห้ามใส่ <script>")
+	validate.RegisterValidation(TagNoScript, validateNoScript)
+	RegisterTranslation(TagNoScript, "{0} ห้ามใส่ <script>")
+
+	validate.RegisterValidation(TagNoEmoji, validateNoEmoji)
+	RegisterTranslation(TagNoEmoji, "{0} ห้ามใส่ emoji")
 }
 
 func validateThaiMobile(fl validator.FieldLevel) bool {
@@ -25,4 +29,8 @@ func validateThaiMobile(fl validator.FieldLevel) bool {
 
 func validateNoScript(fl validator.FieldLevel) bool {
 	return !reScript.MatchString(fl.Field().String())
+}
+
+func validateNoEmoji(fl validator.FieldLevel) bool {
+	return !gomoji.ContainsEmoji(fl.Field().String())
 }

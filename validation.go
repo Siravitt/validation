@@ -32,7 +32,8 @@ func init() {
 	})
 
 	en_translations.RegisterDefaultTranslations(validate, trans)
-	registerDefaultTranslations()
+	overrideThaiTranslations()
+
 	registerCustomValidations()
 }
 
